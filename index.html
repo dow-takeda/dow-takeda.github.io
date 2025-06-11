@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ネコの15パズル</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap');
+    body {
+      font-family: 'Kosugi Maru', sans-serif;
+      text-align: center;
+      background-color: #fffaf0;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 2.2em;
+      color: #6b4b3e;
+      margin-bottom: 20px;
+    }
+    #puzzle {
+      width: 320px;
+      height: 320px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+    }
+    .tile {
+      width: 75px;
+      height: 75px;
+      font-size: 26px;
+      font-weight: bold;
+      background-color: #ffcccb;
+      color: #4b2e2e;
+      border-radius: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 2px 2px 5px #aaa;
+      transition: 0.2s;
+    }
+    .tile:hover {
+      background-color: #ffc1c1;
+    }
+    .empty {
+      background-color: #f0e68c;
+      cursor: default;
+      box-shadow: none;
+    }
+    button {
+      margin-top: 30px;
+      padding: 20px 30px;
+      font-size: 20px;
+      background-color: #f4a261;
+      color: white;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      font-family: 'Kosugi Maru', sans-serif;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    }
+    button:hover {
+      background-color: #e76f51;
+    }
+    #win-message {
+      display: none;
+      background-color: rgba(255, 255, 255, 0.95);
+      border: 2px solid #d2691e;
+      padding: 40px;
+      border-radius: 20px;
+      position: fixed;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -30%);
+      box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+    }
+    #win-message h2 {
+      font-size: 26px;
+      color: #d2691e;
+      margin-bottom: 20px;
+    }
+    #win-message button {
+      padding: 18px 28px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>ネコの15パズル🐾</h1>
+  <div id="puzzle"></div>
+  <button onclick="shuffle()">シャッフルするにゃ！</button>
+
+  <div id="win-message">
+    <h2>にゃーん！すごいにゃ！<br>天才ネコ級だにゃ！😻</h2>
+    <button onclick="closeMessage()">もう一回あそぶにゃ！</button>
+  </div>
+
+  <script>
+    const puzzle = document.getElementById('puzzle');
+    const winMessage = document.getElementById('win-message');
+    let tiles = [];
+
+    function createTiles() {
+      tiles = [...Array(15).keys()].map(x => x + 1).concat(null);
+      draw();
+    }
+
+    function draw() {
+      puzzle.innerHTML = '';
+      tiles.forEach((val, idx) => {
+        const div = document.createElement('div');
+        div.className = 'tile';
+        if (val === null) {
+          div.classList.add('empty');
+        } else {
+          div.textContent = val;
+          div.onclick = () => tryMove(idx);
+        }
+        puzzle.appendChild(div);
+      });
+    }
+
+    function tryMove(idx) {
+      const emptyIdx = tiles.indexOf(null);
+      const isMovable =
+        [1, -1, 4, -4].some(offset => idx + offset === emptyIdx &&
+          !(idx % 4 === 0 && offset === -1) &&
+          !(idx % 4 === 3 && offset === 1));
+      if (isMovable) {
+        [tiles[idx], tiles[emptyIdx]] = [tiles[emptyIdx], tiles[idx]];
+        draw();
+        checkWin();
+      }
+    }
+
+    function shuffle() {
+      for (let i = tiles.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
+      }
+      draw();
+    }
+
+    function checkWin() {
+      const win = [...Array(15).keys()].map(x => x + 1).concat(null);
+      if (tiles.every((val, i) => val === win[i])) {
+        setTimeout(() => winMessage.style.display = 'block', 300);
+      }
+    }
+
+    function closeMessage() {
+      winMessage.style.display = 'none';
+      shuffle();
+    }
+
+    createTiles();
+  </script>
+</body>
+</html>
