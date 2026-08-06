@@ -1,162 +1,215 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>ねこの15パズル</title>
-  <style>
-    body {
-      font-family: "Hiragino Maru Gothic ProN", sans-serif;
-      text-align: center;
-      background-color: #fffaf0;
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>竹田 時雄 — デブオプワーカー</title>
+<meta name="description" content="システムを安定して稼働させ続けること、開発プロジェクトを希望どおりに完遂させることを 請け負うフリーランスエンジニアです。業務システムの開発・運用に 19 年。">
+<link rel="canonical" href="https://devopsworker.jp/">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="竹田 時雄 — デブオプワーカー">
+<meta property="og:description" content="システムを安定して稼働させ続けること、開発プロジェクトを希望どおりに完遂させることを 請け負うフリーランスエンジニアです。業務システムの開発・運用に 19 年。">
+<meta property="og:url" content="https://devopsworker.jp/">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "竹田 時雄",
+  "jobTitle": "フリーランスエンジニア",
+  "url": "https://devopsworker.jp/",
+  "email": "mailto:takeda@devopsworker.jp",
+  "worksFor": {
+    "@type": "Organization",
+    "name": "デブオプワーカー"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressRegion": "神奈川県川崎市"
+  },
+  "description": "システムを安定して稼働させ続けること、開発プロジェクトを希望どおりに完遂させることを 請け負うフリーランスエンジニアです。業務システムの開発・運用に 19 年。",
+  "knowsAbout": [
+    "Java",
+    "JavaScript",
+    "PHP",
+    "Python",
+    "JSP",
+    "Spring Framework",
+    "MyBatis",
+    "Spring Security",
+    "Spring MVC",
+    "Spring Web Flow",
+    "Velocity Engine",
+    "Spring Boot",
+    "Thymeleaf",
+    "Django",
+    "FastAPI",
+    "Laravel",
+    "iBatis",
+    "Struts",
+    "PostgreSQL",
+    "Oracle"
+  ]
+}
+</script>
+<style>
+:root {
+  --ink: #1a1a1a;
+  --muted: #6b6b6b;
+  --accent: #1f4e6b;
+  --hairline: #dcdcdc;
+  --band: #f2f5f7;
+  --tile: #f7f7f5;
+  --bg: #ffffff;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #e8e8e8;
+    --muted: #9a9a9a;
+    --accent: #7fb5d5;
+    --hairline: #3a3a3a;
+    --band: #1e262b;
+    --tile: #1c1c1c;
+    --bg: #131313;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  font-size: 16px;
+  line-height: 1.85;
+  -webkit-text-size-adjust: 100%;
+}
+.wrap { max-width: 780px; margin: 0 auto; padding: 3rem 1.25rem 4rem; }
+strong { color: var(--accent); font-weight: 700; }
 
-    h1 {
-      font-size: 2em;
-      margin-top: 0.5em;
-    }
+header { border-bottom: 3px solid var(--accent); padding-bottom: 0.75rem; }
+h1 { font-size: 2rem; margin: 0; letter-spacing: 0.02em; }
+h1 .sub { font-size: 0.85rem; font-weight: 400; color: var(--muted); margin-left: 0.75rem; }
+header .tagline { color: var(--muted); font-size: 0.9rem; margin: 0.35rem 0 0; }
 
-    #puzzle {
-      display: grid;
-      grid-template-columns: repeat(4, 80px);
-      grid-template-rows: repeat(4, 80px);
-      gap: 4px;
-      justify-content: center;
-      margin: 20px auto;
-    }
+h2 {
+  font-size: 1.25rem;
+  color: var(--accent);
+  margin: 3rem 0 0.4rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 2px solid var(--accent);
+}
+h3 { font-size: 1rem; margin: 1.75rem 0 0.4rem; }
+p { margin: 0 0 1rem; }
+ul { margin: 0 0 1rem; padding-left: 1.3rem; }
+li { margin-bottom: 0.3rem; }
 
-    .tile {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      background: #ffe;
-      border: 2px solid #ccc;
-      border-radius: 12px;
-      cursor: pointer;
-      user-select: none;
-      box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.6rem; margin: 1.5rem 0; }
+.tile { background: var(--tile); border-radius: 3px; padding: 0.7rem 0.9rem; }
+.tile .label { font-size: 0.72rem; color: var(--muted); display: block; }
+.tile .value { font-size: 1.05rem; font-weight: 700; }
 
-    .empty {
-      background: #fff8dc;
-      border: 2px dashed #ddd;
-      cursor: default;
-    }
+.meta {
+  background: var(--band);
+  color: var(--accent);
+  font-size: 0.82rem;
+  padding: 0.55rem 0.8rem;
+  margin: 0.2rem 0 1.2rem;
+}
+.tech { color: var(--muted); font-size: 0.82rem; margin-top: 1rem; }
 
-    button {
-      font-size: 20px;
-      margin-top: 12px;
-      padding: 10px 20px;
-      border-radius: 12px;
-      border: none;
-      background-color: #fdd;
-      box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-      cursor: pointer;
-    }
+.skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0 1.75rem; }
+.skills h3 { font-size: 0.85rem; color: var(--accent); margin: 1.2rem 0 0.3rem; }
+table { border-collapse: collapse; width: 100%; font-size: 0.85rem; }
+.skills td { padding: 0.22rem 0.4rem; }
+.skills tr:nth-child(odd) { background: var(--tile); }
+.skills td.n { text-align: right; white-space: nowrap; color: var(--muted); }
+.skills td.y { text-align: right; white-space: nowrap; }
+.skills td.cur { color: var(--accent); font-weight: 700; }
 
-    #message {
-      margin-top: 1em;
-      font-size: 1.2em;
-      color: #c66;
-    }
-  </style>
+.results { margin: 0.5rem 0 1.2rem; font-size: 0.88rem; }
+.results th { text-align: left; font-size: 0.78rem; color: var(--muted); font-weight: 700; padding: 0.4rem; border-bottom: 2px solid var(--accent); }
+.results td { padding: 0.5rem 0.4rem; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+.results td.after { color: var(--accent); font-weight: 700; }
+
+.note { font-size: 0.85rem; color: var(--muted); }
+.contact { background: var(--tile); padding: 1.1rem 1.2rem; border-radius: 3px; margin-top: 1rem; }
+.contact a { color: var(--accent); font-weight: 700; }
+footer { margin-top: 3.5rem; padding-top: 1rem; border-top: 1px solid var(--hairline); color: var(--muted); font-size: 0.78rem; }
+</style>
 </head>
 <body>
-  <h1>ねこの15パズル</h1>
-  <div id="puzzle"></div>
-  <button onclick="shuffle()">シャッフルするにゃ</button>
-  <p id="message"></p>
+<div class="wrap">
 
-  <script>
-    const puzzle = document.getElementById('puzzle');
-    const message = document.getElementById('message');
-    let tiles = [];
+<header>
+  <h1>竹田 時雄<span class="sub">タケダ トキオ ／ デブオプワーカー</span></h1>
+  <p class="tagline">神奈川県川崎市　｜　横浜市立大学 理学部 中退（2006-03）</p>
+</header>
 
-    function init() {
-      tiles = [];
-      for (let i = 1; i <= 15; i++) {
-        tiles.push(i);
-      }
-      tiles.push(null); // 空白
-      draw();
-    }
+<p>業務システムの開発・運用に 19 年携わってきました。フリーランスとして請け負っているのは、 <strong>システムを安定して稼働させ続けること</strong> と、 <strong>開発プロジェクトを希望どおりに進めて完遂させること</strong> の 2 つです。</p><p>安定稼働を守る手段のひとつとして、引き継ぎ資料のないシステムを引き取り、 運用が回る状態まで立て直すこともできます。</p><p>目指しているのは「自分がいなくても回る状態」を作ることです。ある取引先とは 9 年、 常駐の開発リーダーからスポット対応へと関与を半分以下に減らしながら、関係が続いています。 いま実際に回っているのは現場の担当者が真摯に業務にあたっているからで、 私はその状態に持っていく側として関わってきました。</p>
 
-    function draw() {
-      puzzle.innerHTML = '';
-      for (let i = 0; i < 16; i++) {
-        const div = document.createElement('div');
-        div.className = 'tile';
-        if (tiles[i] === null) {
-          div.classList.add('empty');
-        } else {
-          div.textContent = tiles[i];
-          div.addEventListener('click', () => move(i));
-        }
-        puzzle.appendChild(div);
-      }
-    }
+<div class="tiles"><div class="tile"><span class="label">経験年数</span><span class="value">19 年 3 ヶ月</span></div><div class="tile"><span class="label">案件数</span><span class="value">22 件</span></div><div class="tile"><span class="label">資格</span><span class="value">基本情報技術者 ／ 応用情報技術者</span></div><div class="tile"><span class="label">対応可能稼働</span><span class="value">週 16 時間まで</span></div></div>
 
-    function move(index) {
-      const emptyIndex = tiles.indexOf(null);
-      const x = index % 4, y = Math.floor(index / 4);
-      const ex = emptyIndex % 4, ey = Math.floor(emptyIndex / 4);
-      const dx = Math.abs(x - ex), dy = Math.abs(y - ey);
-      if (dx + dy === 1) {
-        [tiles[index], tiles[emptyIndex]] = [tiles[emptyIndex], tiles[index]];
-        draw();
-        checkClear();
-      }
-    }
+<h2>主なスキル</h2>
+<p class="note">
+  使用年数は稼働月の和集合で数えています（並行案件の重複は除外）。
+  <strong>最終使用が 2026-08 のものは現在も実務で使用中</strong>です。
+</p>
+<div class="skills"><h3>言語</h3><table><tr><td>Java</td><td class="y">17.0 年</td><td class="n">17 件</td><td class="y cur">2026-08</td></tr><tr><td>JavaScript</td><td class="y">7.1 年</td><td class="n">8 件</td><td class="y cur">2026-08</td></tr><tr><td>PHP</td><td class="y">4.8 年</td><td class="n">2 件</td><td class="y cur">2026-08</td></tr><tr><td>Python</td><td class="y">4.3 年</td><td class="n">2 件</td><td class="y cur">2026-08</td></tr><tr><td>JSP</td><td class="y">2.7 年</td><td class="n">7 件</td><td class="y">2010-06</td></tr></table><h3>フレームワーク</h3><table><tr><td>Spring Framework</td><td class="y">9.9 年</td><td class="n">7 件</td><td class="y">2022-03</td></tr><tr><td>MyBatis</td><td class="y">8.6 年</td><td class="n">4 件</td><td class="y">2022-03</td></tr><tr><td>Spring Security</td><td class="y">7.9 年</td><td class="n">6 件</td><td class="y">2019-09</td></tr><tr><td>Spring MVC</td><td class="y">7.2 年</td><td class="n">5 件</td><td class="y">2019-09</td></tr><tr><td>Django</td><td class="y">4.3 年</td><td class="n">1 件</td><td class="y cur">2026-08</td></tr><tr><td>FastAPI</td><td class="y">4.3 年</td><td class="n">1 件</td><td class="y cur">2026-08</td></tr><tr><td>Laravel</td><td class="y">4.3 年</td><td class="n">1 件</td><td class="y cur">2026-08</td></tr></table><h3>データベース</h3><table><tr><td>PostgreSQL</td><td class="y">12.2 年</td><td class="n">11 件</td><td class="y cur">2026-08</td></tr><tr><td>Oracle</td><td class="y">6.6 年</td><td class="n">8 件</td><td class="y">2017-01</td></tr><tr><td>MySQL</td><td class="y">4.3 年</td><td class="n">1 件</td><td class="y cur">2026-08</td></tr></table><h3>OS</h3><table><tr><td>CentOS</td><td class="y">10.4 年</td><td class="n">8 件</td><td class="y">2022-03</td></tr><tr><td>Windows</td><td class="y">10.1 年</td><td class="n">12 件</td><td class="y">2019-09</td></tr><tr><td>Amazon Linux</td><td class="y">5.6 年</td><td class="n">3 件</td><td class="y cur">2026-08</td></tr><tr><td>Windows Server 2008 R2</td><td class="y">3.9 年</td><td class="n">1 件</td><td class="y">2017-01</td></tr><tr><td>Windows Server</td><td class="y">3.0 年</td><td class="n">8 件</td><td class="y">2010-06</td></tr></table><h3>クラウド</h3><table><tr><td>AWS</td><td class="y">6.9 年</td><td class="n">5 件</td><td class="y cur">2026-08</td></tr><tr><td>IDCF Cloud</td><td class="y">3.2 年</td><td class="n">3 件</td><td class="y">2020-03</td></tr></table><h3>インフラ・ミドルウェア</h3><table><tr><td>Ansible</td><td class="y">5.2 年</td><td class="n">5 件</td><td class="y">2022-03</td></tr><tr><td>Apache</td><td class="y">5.2 年</td><td class="n">5 件</td><td class="y">2022-03</td></tr><tr><td>Tomcat</td><td class="y">5.2 年</td><td class="n">5 件</td><td class="y">2022-03</td></tr><tr><td>AWS CDK</td><td class="y">4.3 年</td><td class="n">1 件</td><td class="y cur">2026-08</td></tr><tr><td>AWS CloudFormation</td><td class="y">4.3 年</td><td class="n">1 件</td><td class="y cur">2026-08</td></tr><tr><td>Terraform</td><td class="y">4.3 年</td><td class="n">1 件</td><td class="y cur">2026-08</td></tr><tr><td>Docker</td><td class="y">4.2 年</td><td class="n">2 件</td><td class="y cur">2026-08</td></tr></table><h3>AI・開発支援</h3><table><tr><td>AI コーディング支援・エージェント</td><td class="y">1.7 年</td><td class="n">3 件</td><td class="y cur">2026-08</td></tr></table></div>
+<p class="note">案件での使用歴はないが習得済み：Kubernetes</p>
 
-    function shuffle() {
-      let grid = [];
-      for (let i = 0; i < 4; i++) {
-        grid.push(tiles.slice(i * 4, i * 4 + 4));
-      }
+<h2>引き継ぎのない状態から運用を立て直し、技術組織を作った</h2>
+<p class="meta">自社サービス（SaaS）　｜　少人数の技術組織　｜　2022 年〜現在（技術責任者）</p>
+<h3>引き受けた状況</h3>
+<p>開発を担ってきたエンジニアが不在となったタイミングで参画しました。 運用手順が個人の経験に依存していたため、<strong>動いているインフラとソースコードから手順を起こし直す</strong> ところから始めています。</p>
+<p>異常系の作り込みが追いついておらず、その結果として不要な監視アラートと 深夜の長時間メンテナンスが常態化していました。 技術選定と設計の判断も、あわせて引き受ける立場になりました。</p>
+<h3>やったこと</h3>
+<p>稼働中のサービスを止めるわけにはいかないため、顧客と調整しながら運用手順を立て直しました。 並行して、属人化を二度と起こさないための土台を作っています。</p>
+<ul><li>開発基盤の整備（CI/CD、テスト、環境構築の自動化）</li><li>ドキュメントとナレッジの整備</li><li>設計・技術選定のルール化とレビュー体制の構築</li><li>コードレビューの導入と定着</li></ul>
+<p>技術責任者になった段階で <strong>未経験のエンジニアを 1 名採用し、ゼロから育てました</strong> 。 1on1 とメンタリング、ペアプロ・モブプロによる伴走開発、その後は採用と技術面接にも関与しています。</p>
+<h3>結果</h3>
+<table class="results"><tr><th></th><th>改善前</th><th>改善後</th></tr><tr><td>監視アラート</td><td>月 3〜5 件</td><td class="after">年 1 件程度</td></tr><tr><td>深夜メンテナンスの作業・ダウンタイム</td><td>メンテナンスウィンドウ内で 8 時間</td><td class="after">事前作業 6 時間 ＋ ウィンドウ内 1 時間以内</td></tr></table>
+<p>既存の維持で手一杯だった状態から、新規プロダクト・機能を出せるようになりました。 育てたエンジニアは <strong>基本設計からリリース・運用作業までを一人で完結</strong> できます （要件定義の作成と顧客合意は現在も伴走しています）。 重要な判断以外をほぼ任せているプロダクトもあります。</p>
+<p class="tech">技術：Python、PHP / Laravel、AWS、Terraform / CloudFormation / CDK、Docker</p>
+<h2>常駐の開発リーダーから、9 年続くスポット対応へ</h2>
+<p class="meta">人材サービス業　｜　常時 40 名規模　｜　2017 年 2 月〜現在（9 年）</p>
+<h3>会社員として</h3>
+<p>採用管理パッケージの現場に SES として参画し、<strong>自社社員をまとめる開発リーダー</strong> を務めました。 担当したのは要件定義から基本設計、開発スケジュール管理、本番環境リリース、運用フォローまで。 <strong>作るものを決める段階から、動かして引き渡すまでを一続きで持っていました</strong> 。 常時 40 名規模の現場で、直接見ていたのは 7 名です。 現場社員と他パートナー会社を含めた運用作業の設計と実施も行っています。</p>
+<h3>独立後</h3>
+<p>2022 年 3 月に退職しましたが、<strong>現場知識と手腕を評価され、フリーランスとして契約が継続</strong> しました。 現在は関与を大きく減らし、次のような形で関わっています。</p>
+<ul><li>新技術の検証と導入判断</li><li>既存の運用作業の立て直しに関する助言</li><li>突発的な障害の調査と、解決方法の提示</li></ul>
+<p>依頼の中身は 2 種類です。ひとつは技術的な難易度が高く、腰を据えて調べる必要があるもの。 もうひとつは現場でも対応できるものの、人的リソースやスケジュールの都合で 外に出したいものです。<strong>必要なときに必要な分だけ動ける相手</strong> として置いてもらっています。 採用管理パッケージを中心に置いたエコシステムのなかで、新規パッケージにも関わっています。</p>
+<h3>この 9 年が示していること</h3>
+<p>常駐のリーダーから、<strong>関与を半分以下に減らしながら関係は切れていません</strong> 。 現場が自走できるようになり、そのうえで難所のときと手が足りないときに呼ばれる関係が残りました。 これは「自分がいなくても回る状態を作る」という進め方が機能した結果だと考えています。 もっとも、いま安定して回っているのは現場の担当者が真摯に業務にあたっているからで、 私が用意したのはその土台までです。</p>
+<p class="tech">技術：Java、PostgreSQL、JavaScript、AWS</p>
+<h2>動いているものを、止めずに載せ替える</h2>
+<p class="meta">人材サービス業　｜　常時 40 名が利用する本番システム　｜　2019 年〜2021 年</p>
+<p>止められないシステムの基盤を入れ替える仕事を、2 件続けて担当しました。 いずれも調査、移行計画の作成、環境構築、テスト設計・実施、運用調整、移行実施までを通しで行っています。</p>
+<h3>クラウド移行（IDCF Cloud → AWS）　2019 年 10 月〜2020 年 3 月　｜　90 人月／4 名</h3>
+<p>稼働中の採用管理パッケージを、オンプレミス系のクラウドから AWS へ移行しました。 利用中の顧客がいる本番環境のため、移行そのものよりも運用調整に重心がありました。</p>
+<h3>OS / ミドルウェアのバージョンアップ　2020 年 8 月〜2021 年 9 月　｜　168 人月／3 名</h3>
+<p>CentOS から Amazon Linux 2 へ、Tomcat 9.5、Apache 2.4、PostgreSQL 12 へ更新しました。 168 人月規模の案件に、<strong>自分を含む 3 名のチームのリーダー</strong> として関わりました。 プロジェクトはインフラ・アプリ・テスト・営業の各チームが横断的に動く体制で、 そのなかで中心を担うチームでした。</p>
+<h3>この 2 件の位置づけ</h3>
+<p>新しく作るより、動いているものを壊さずに入れ替える方が難しいというのが実感です。 ひとつ目のハイライトで運用を立て直せたのも、この 2 件で「止めずに変える」やり方を 身につけていたからです。</p>
+<p class="tech">技術：AWS、Amazon Linux 2、Ansible、Tomcat、Apache、PostgreSQL、CentOS</p>
+<h2>限られた稼働で、4 年間バックエンドを持ち続ける</h2>
+<p class="meta">自社サービス（SaaS）　｜　月 10〜40 時間　｜　2022 年 9 月〜2026 年 7 月</p>
+<p>企画と要求要件定義は先方の社員が担当し、私は <strong>設計・技術選定・開発・実装を一貫して</strong> 引き受けました。 フロントエンド、バックエンド、他サービスが協調するマイクロサービス構成のうち、 バックエンドが担当範囲です。</p>
+<p>運用については、システム監視や常時待機の体制は先方にあり、 調査や運用作業が必要になった際に都度依頼を受けて対応する形でした。</p>
+<p>ここでは組織づくりや教育は行わず、作業者として関わっています。 役割が明確に分かれた体制で、決められた範囲を確実に回すことが求められる形でした。 <strong>すべてを引き取る関わり方だけでなく、既にある体制の一部として入る形</strong> でも成立します。</p>
+<p>稼働は月 10〜40 時間です。<strong>この分量で 4 年間、継続して任されました</strong> 。 限られた稼働でも、設計から実装までを一貫して持てることの実例になっています。</p>
+<p class="tech">技術：Python、Docker、マイクロサービス構成、AI コーディング支援</p>
 
-      let empty = findEmpty(grid);
-      const directions = [
-        { dx: 0, dy: -1 },
-        { dx: 0, dy: 1 },
-        { dx: -1, dy: 0 },
-        { dx: 1, dy: 0 },
-      ];
+<h2>お問い合わせ</h2>
+<div class="contact">
+  <p>業務経歴の一覧（全 22 件）は PDF でお渡ししています。ご連絡ください。</p>
+  <p><a href="mailto:takeda@devopsworker.jp">takeda@devopsworker.jp</a></p>
+</div>
 
-      for (let step = 0; step < 1000; step++) {
-        const candidates = directions
-          .map(d => ({ x: empty.x + d.dx, y: empty.y + d.dy }))
-          .filter(p => p.x >= 0 && p.x < 4 && p.y >= 0 && p.y < 4);
-        const moveTo = candidates[Math.floor(Math.random() * candidates.length)];
-        [grid[empty.y][empty.x], grid[moveTo.y][moveTo.x]] = [grid[moveTo.y][moveTo.x], grid[empty.y][empty.x]];
-        empty = moveTo;
-      }
+<footer>
+  最終更新 2026-08　｜　竹田 時雄（デブオプワーカー）
+</footer>
 
-      tiles = grid.flat();
-      draw();
-      message.textContent = 'がんばってにゃ！';
-    }
-
-    function findEmpty(grid) {
-      for (let y = 0; y < 4; y++) {
-        for (let x = 0; x < 4; x++) {
-          if (grid[y][x] === null) {
-            return { x, y };
-          }
-        }
-      }
-    }
-
-    function checkClear() {
-      for (let i = 0; i < 15; i++) {
-        if (tiles[i] !== i + 1) return;
-      }
-      if (tiles[15] === null) {
-        message.textContent = 'すごいにゃ！お見事にクリアだにゃ！〜';
-      }
-    }
-
-    // 初期化を実行
-    init();
-  </script>
+</div>
 </body>
-</html> 
+</html>

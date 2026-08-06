@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ねこの15パズル</title>
+  <style>
+    body {
+      font-family: "Hiragino Maru Gothic ProN", sans-serif;
+      text-align: center;
+      background-color: #fffaf0;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-top: 0.5em;
+    }
+
+    #puzzle {
+      display: grid;
+      grid-template-columns: repeat(4, 80px);
+      grid-template-rows: repeat(4, 80px);
+      gap: 4px;
+      justify-content: center;
+      margin: 20px auto;
+    }
+
+    .tile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      background: #ffe;
+      border: 2px solid #ccc;
+      border-radius: 12px;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .empty {
+      background: #fff8dc;
+      border: 2px dashed #ddd;
+      cursor: default;
+    }
+
+    button {
+      font-size: 20px;
+      margin-top: 12px;
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: none;
+      background-color: #fdd;
+      box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+
+    #message {
+      margin-top: 1em;
+      font-size: 1.2em;
+      color: #c66;
+    }
+  </style>
+</head>
+<body>
+  <h1>ねこの15パズル</h1>
+  <div id="puzzle"></div>
+  <button onclick="shuffle()">シャッフルするにゃ</button>
+  <p id="message"></p>
+
+  <script>
+    const puzzle = document.getElementById('puzzle');
+    const message = document.getElementById('message');
+    let tiles = [];
+
+    function init() {
+      tiles = [];
+      for (let i = 1; i <= 15; i++) {
+        tiles.push(i);
+      }
+      tiles.push(null); // 空白
+      draw();
+    }
+
+    function draw() {
+      puzzle.innerHTML = '';
+      for (let i = 0; i < 16; i++) {
+        const div = document.createElement('div');
+        div.className = 'tile';
+        if (tiles[i] === null) {
+          div.classList.add('empty');
+        } else {
+          div.textContent = tiles[i];
+          div.addEventListener('click', () => move(i));
+        }
+        puzzle.appendChild(div);
+      }
+    }
+
+    function move(index) {
+      const emptyIndex = tiles.indexOf(null);
+      const x = index % 4, y = Math.floor(index / 4);
+      const ex = emptyIndex % 4, ey = Math.floor(emptyIndex / 4);
+      const dx = Math.abs(x - ex), dy = Math.abs(y - ey);
+      if (dx + dy === 1) {
+        [tiles[index], tiles[emptyIndex]] = [tiles[emptyIndex], tiles[index]];
+        draw();
+        checkClear();
+      }
+    }
+
+    function shuffle() {
+      let grid = [];
+      for (let i = 0; i < 4; i++) {
+        grid.push(tiles.slice(i * 4, i * 4 + 4));
+      }
+
+      let empty = findEmpty(grid);
+      const directions = [
+        { dx: 0, dy: -1 },
+        { dx: 0, dy: 1 },
+        { dx: -1, dy: 0 },
+        { dx: 1, dy: 0 },
+      ];
+
+      for (let step = 0; step < 1000; step++) {
+        const candidates = directions
+          .map(d => ({ x: empty.x + d.dx, y: empty.y + d.dy }))
+          .filter(p => p.x >= 0 && p.x < 4 && p.y >= 0 && p.y < 4);
+        const moveTo = candidates[Math.floor(Math.random() * candidates.length)];
+        [grid[empty.y][empty.x], grid[moveTo.y][moveTo.x]] = [grid[moveTo.y][moveTo.x], grid[empty.y][empty.x]];
+        empty = moveTo;
+      }
+
+      tiles = grid.flat();
+      draw();
+      message.textContent = 'がんばってにゃ！';
+    }
+
+    function findEmpty(grid) {
+      for (let y = 0; y < 4; y++) {
+        for (let x = 0; x < 4; x++) {
+          if (grid[y][x] === null) {
+            return { x, y };
+          }
+        }
+      }
+    }
+
+    function checkClear() {
+      for (let i = 0; i < 15; i++) {
+        if (tiles[i] !== i + 1) return;
+      }
+      if (tiles[15] === null) {
+        message.textContent = 'すごいにゃ！お見事にクリアだにゃ！〜';
+      }
+    }
+
+    // 初期化を実行
+    init();
+  </script>
+</body>
+</html> 
